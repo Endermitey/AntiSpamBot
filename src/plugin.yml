@@ -1,0 +1,6 @@
+name: AntiSpamBot
+author: Endermitey
+version: 1.0
+main: org.endermitey.antispambot.AntiSpamBot
+description: Blocks any bots.
+commands:
