@@ -1,0 +1,79 @@
+package org.endermitey.antispambot;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.plugin.java.JavaPlugin;
+
+public class AntiSpamBot extends JavaPlugin implements Listener{
+
+	List<String> bot = new ArrayList<>();
+	
+	@Override
+	public void onEnable() {
+		
+		Bukkit.getServer().getPluginManager().registerEvents(this, this);
+		
+	}
+	
+	//@EventHandler
+	//public void onLogin(PlayerLoginEvent e) {
+		
+		//Player p = e.getPlayer();
+		//bot.add(p.getName());
+	//}
+	
+	
+	@EventHandler
+	public void onJoin(PlayerJoinEvent e) {
+		
+		Player p = e.getPlayer();
+		
+		bot.add(p.getName());
+		p.sendMessage("§4§lBOT §7To make sure you're not a bot, please type this:");
+		p.sendMessage("§4§lBOT §7§oI am not a bot");
+		p.sendMessage("§4§lBOT §7If you have not typed it, then everything you do will be blocked!");
+	}
+	
+	@EventHandler
+	public void onChat(AsyncPlayerChatEvent e) {
+		
+		Player p = e.getPlayer();
+		
+		String message = e.getMessage();
+		
+		if(bot.contains(p.getName())) {
+			if(!message.equals("I am not a bot")) {
+				e.setCancelled(true);
+				p.sendMessage("§4§lBOT §7§lPlease enter §7'I am not a bot'");
+			}
+			else {
+				e.setCancelled(true);
+				bot.remove(p.getName());
+				p.sendMessage("§6§l>> §a§lThanks! §aNow you can play!");
+			}
+		}
+	}
+	
+	@EventHandler
+	public void onMove(PlayerMoveEvent e) {
+		
+		Player p = e.getPlayer();
+		
+		if(bot.contains(p.getName())) {
+			e.setTo(e.getFrom());
+			p.sendMessage("§4§lBOT §7§lPlease enter §7'I am not a bot'");
+		}
+		else {
+			return;
+		}
+	}
+	
+}
